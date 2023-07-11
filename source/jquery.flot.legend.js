@@ -50,29 +50,23 @@
 
         var left = 0;
         var columnWidths = [];
-        var style = window.getComputedStyle(document.querySelector('body'));
         for (i = 0; i < entries.length; ++i) {
             let columnIndex = i % options.legend.noColumns;
             entry = entries[i];
             shape.label = entry.label;
-            var info = plot.getSurface().getTextInfo('', shape.label, {
-                style: style.fontStyle,
-                variant: style.fontVariant,
-                weight: style.fontWeight,
-                size: parseInt(style.fontSize),
-                lineHeight: parseInt(style.lineHeight),
-                family: style.fontFamily
-            });
 
-            var labelWidth = info.width;
-            // 36px = 1.5em + 6px margin
-            var iconWidth = 48;
+            var font = options.legend.container != null ? $(options.legend.container).css('font') : plot.getPlaceholder().css('font');
+            var info = plot.getSurface().getTextInfo('', shape.label, font);
+
+            // 36px = 1.5em + 6px margin // smaller font size
+            var labelWidth = info.width + 24;
+
             if (columnWidths[columnIndex]) {
                 if (labelWidth > columnWidths[columnIndex]) {
-                    columnWidths[columnIndex] = labelWidth + iconWidth;
+                    columnWidths[columnIndex] = labelWidth;
                 }
             } else {
-                columnWidths[columnIndex] = labelWidth + iconWidth;
+                columnWidths[columnIndex] = labelWidth;
             }
         }
 
